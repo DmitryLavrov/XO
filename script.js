@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cells = document.querySelectorAll('.cell');
   const resetButton = document.getElementById('reset');
   const message = document.getElementById('message');
+  const currentPlayerDisplay = document.getElementById('current-player');
   let currentPlayer = 'X';
   let board = Array(9).fill(null);
   let gameActive = true;
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     board[cellIndex] = currentPlayer;
     cell.textContent = currentPlayer;
+    cell.classList.add(currentPlayer.toLowerCase());
 
     if (checkWin()) {
       gameActive = false;
@@ -41,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    currentPlayerDisplay.textContent = currentPlayer;
   }
 
   function checkWin() {
@@ -57,8 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
     currentPlayer = 'X';
     cells.forEach((cell) => {
       cell.textContent = '';
+      cell.classList.remove('x', 'o');
     });
     message.textContent = '';
+    currentPlayerDisplay.textContent = currentPlayer;
   }
 
   cells.forEach((cell) => {

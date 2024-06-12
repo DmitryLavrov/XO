@@ -30,6 +30,19 @@ body {
   cursor: pointer;
 }
 
+.cell.x {
+  color: blue;
+}
+
+.cell.o {
+  color: red;
+}
+
+#turn {
+  margin-top: 10px;
+  font-size: 1.2em;
+}
+
 #reset {
   margin-top: 20px;
   padding: 10px 20px;
