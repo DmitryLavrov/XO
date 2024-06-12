@@ -11,19 +11,27 @@ body {
   text-align: center;
 }
 
+#size-selection {
+  margin-bottom: 20px;
+}
+
+.size-option {
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
 #board {
   display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-template-rows: repeat(3, 100px);
   gap: 10px;
+  margin-bottom: 20px;
 }
 
 .cell {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
-  height: 100px;
   background-color: #fff;
   border: 2px solid #333;
   font-size: 2em;
@@ -39,7 +47,6 @@ body {
 }
 
 #turn {
-  margin-top: 10px;
   font-size: 1.2em;
 }
 

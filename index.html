@@ -8,17 +8,12 @@
   </head>
   <body>
     <div id="game">
-      <div id="board">
-        <div class="cell" data-index="0"></div>
-        <div class="cell" data-index="1"></div>
-        <div class="cell" data-index="2"></div>
-        <div class="cell" data-index="3"></div>
-        <div class="cell" data-index="4"></div>
-        <div class="cell" data-index="5"></div>
-        <div class="cell" data-index="6"></div>
-        <div class="cell" data-index="7"></div>
-        <div class="cell" data-index="8"></div>
+      <div id="size-selection">
+        <button class="size-option" data-size="3" style="background-color: lightblue">3x3</button>
+        <button class="size-option" data-size="4" style="background-color: lightgreen">4x4</button>
+        <button class="size-option" data-size="5" style="background-color: lightcoral">5x5</button>
       </div>
+      <div id="board"></div>
       <p id="turn">Ходит игрок: <span id="current-player">X</span></p>
       <button id="reset">Сбросить игру</button>
       <p id="message"></p>
