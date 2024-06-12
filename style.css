@@ -36,6 +36,7 @@ body {
   border: 2px solid #333;
   font-size: 2em;
   cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .cell.x {
@@ -44,6 +45,10 @@ body {
 
 .cell.o {
   color: red;
+}
+
+.cell.highlight {
+  background-color: yellow;
 }
 
 #turn {

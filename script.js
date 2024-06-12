@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetButton = document.getElementById('reset'); // Кнопка сброса игры
   const message = document.getElementById('message'); // Сообщение о результате игры
   const currentPlayerDisplay = document.getElementById('current-player'); // Отображение текущего игрока
+  const clickSound = document.getElementById('click-sound'); // Звук клика
+  const winSound = document.getElementById('win-sound'); // Звук победы
+  const drawSound = document.getElementById('draw-sound'); // Звук ничьей
   let currentPlayer = 'X'; // Текущий игрок
   let board; // Массив для хранения состояния игрового поля
   let gameActive = true; // Статус активности игры
@@ -25,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
       boardElement.appendChild(cell); // Добавление ячейки на игровое поле
     }
     winningCombinations = generateWinningCombinations(size); // Генерация выигрышных комбинаций
+    saveGameState(); // Сохранение состояния игры
   }
 
   // Генерация выигрышных комбинаций
@@ -73,21 +77,26 @@ document.addEventListener('DOMContentLoaded', () => {
     board[cellIndex] = currentPlayer; // Обновление состояния игрового поля
     cell.textContent = currentPlayer; // Отображение текущего игрока в ячейке
     cell.classList.add(currentPlayer.toLowerCase()); // Добавление класса для стилизации
+    clickSound.play(); // Проигрывание звука клика
 
     if (checkWin()) {
       gameActive = false; // Игра завершена
       message.textContent = `Игрок ${currentPlayer} выиграл!`; // Сообщение о победе
+      highlightWinningCombination(); // Подсветка выигрышной комбинации
+      winSound.play(); // Проигрывание звука победы
       return;
     }
 
     if (board.every((cell) => cell)) {
       gameActive = false; // Игра завершена ничьей
       message.textContent = 'Ничья!';
+      drawSound.play(); // Проигрывание звука ничьей
       return;
     }
 
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Переключение текущего игрока
     currentPlayerDisplay.textContent = currentPlayer; // Обновление отображения текущего игрока
+    saveGameState(); // Сохранение состояния игры
   }
 
   // Проверка выигрышных комбинаций
@@ -99,6 +108,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Подсветка выигрышной комбинации
+  function highlightWinningCombination() {
+    winningCombinations.forEach((combination) => {
+      if (combination.every((index) => board[index] === currentPlayer)) {
+        combination.forEach((index) => {
+          document.querySelector(`.cell[data-index='${index}']`).classList.add('highlight');
+        });
+      }
+    });
+  }
+
   // Сброс игры
   function resetGame() {
     gameActive = true; // Активируем игру
@@ -106,18 +126,51 @@ document.addEventListener('DOMContentLoaded', () => {
     message.textContent = ''; // Очистка сообщения
     currentPlayerDisplay.textContent = currentPlayer; // Обновление отображения текущего игрока
     createBoard(boardSize); // Создание игрового поля
+    localStorage.removeItem('ticTacToeState'); // Удаление сохраненного состояния
   }
 
-  // Добавление обработчиков кликов для выбора размера поля
+  // Сохранение состояния игры
+  function saveGameState() {
+    const gameState = {
+      board: board,
+      currentPlayer: currentPlayer,
+      gameActive: gameActive,
+      boardSize: boardSize,
+    };
+    localStorage.setItem('ticTacToeState', JSON.stringify(gameState));
+  }
+
+  // Загрузка состояния игры
+  function loadGameState() {
+    const gameState = JSON.parse(localStorage.getItem('ticTacToeState'));
+    if (gameState) {
+      board = gameState.board;
+      currentPlayer = gameState.currentPlayer;
+      gameActive = gameState.gameActive;
+      boardSize = gameState.boardSize;
+      createBoard(boardSize);
+      board.forEach((player, index) => {
+        if (player) {
+          const cell = document.querySelector(`.cell[data-index='${index}']`);
+          cell.textContent = player;
+          cell.classList.add(player.toLowerCase());
+        }
+      });
+      currentPlayerDisplay.textContent = currentPlayer;
+    }
+  }
+
   sizeOptions.forEach((option) => {
     option.addEventListener('click', () => {
-      createBoard(parseInt(option.getAttribute('data-size'))); // Создание поля с выбранным размером
-      document.getElementById('size-selection').style.display = 'none'; // Скрытие опций выбора размера
-      boardElement.style.display = 'grid'; // Отображение игрового поля
-      resetButton.style.display = 'block'; // Отображение кнопки сброса
-      document.getElementById('turn').style.display = 'block'; // Отображение текущего игрока
+      createBoard(parseInt(option.getAttribute('data-size'))); // Создание игрового поля выбранного размера
+      document.getElementById('size-selection').style.display = 'none'; // Скрытие выбора размера
+      boardElement.style.display = 'grid'; // Показ игрового поля
+      resetButton.style.display = 'block'; // Показ кнопки сброса
+      document.getElementById('turn').style.display = 'block'; // Показ информации о текущем ходе
     });
   });
 
-  resetButton.addEventListener('click', resetGame); // Добавление обработчика клика для сброса игры
+  resetButton.addEventListener('click', resetGame); // Добавление обработчика для кнопки сброса игры
+
+  loadGameState(); // Загрузка состояния игры при загрузке страницы
 });
