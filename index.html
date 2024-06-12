@@ -8,14 +8,19 @@
   </head>
   <body>
     <div id="game">
+      <!-- Блок для выбора размера поля -->
       <div id="size-selection">
         <button class="size-option" data-size="3" style="background-color: lightblue">3x3</button>
         <button class="size-option" data-size="4" style="background-color: lightgreen">4x4</button>
         <button class="size-option" data-size="5" style="background-color: lightcoral">5x5</button>
       </div>
+      <!-- Игровое поле -->
       <div id="board"></div>
+      <!-- Показ текущего игрока -->
       <p id="turn">Ходит игрок: <span id="current-player">X</span></p>
+      <!-- Кнопка сброса игры -->
       <button id="reset">Сбросить игру</button>
+      <!-- Сообщение о победе или ничьей -->
       <p id="message"></p>
     </div>
     <script src="script.js"></script>
